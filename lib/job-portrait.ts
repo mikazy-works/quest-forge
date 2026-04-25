@@ -6,9 +6,10 @@ type Palette = {
 };
 
 type PortraitSpec = {
-  archetype: "knight" | "mage" | "rogue" | "summoner" | "priest" | "vanguard";
+  archetype: "knight" | "mage" | "rogue" | "summoner" | "priest" | "sage" | "vanguard";
   palette: Palette;
   title: string;
+  imagePath: string;
 };
 
 const ELEMENT_PALETTES: Record<string, Palette> = {
@@ -55,7 +56,11 @@ function inferArchetype(jobName: string): PortraitSpec["archetype"] {
     return "knight";
   }
 
-  if (jobName.includes("賢者") || jobName.includes("魔導")) {
+  if (jobName.includes("賢者")) {
+    return "sage";
+  }
+
+  if (jobName.includes("魔導")) {
     return "mage";
   }
 
@@ -74,10 +79,35 @@ function inferArchetype(jobName: string): PortraitSpec["archetype"] {
   return "vanguard";
 }
 
+function getImagePath(archetype: PortraitSpec["archetype"], element: string) {
+  switch (archetype) {
+    case "knight":
+    case "vanguard":
+      return "/images/classes/knight-fire.png";
+    case "priest":
+      return "/images/classes/priest-water.png";
+    case "rogue":
+      return "/images/classes/rogue-wind.png";
+    case "mage":
+      return "/images/classes/mage-thunder.png";
+    case "sage":
+      return "/images/classes/sage-light.png";
+    case "summoner":
+      return "/images/classes/summoner-dark.png";
+    default:
+      return element === "光"
+        ? "/images/classes/sage-light.png"
+        : "/images/classes/knight-fire.png";
+  }
+}
+
 export function getPortraitSpec(jobName: string, element: string): PortraitSpec {
+  const archetype = inferArchetype(jobName);
+
   return {
-    archetype: inferArchetype(jobName),
+    archetype,
     palette: ELEMENT_PALETTES[element] ?? ELEMENT_PALETTES["光"],
-    title: `${element}属性の${jobName}`
+    title: `${element}属性の${jobName}`,
+    imagePath: getImagePath(archetype, element)
   };
 }

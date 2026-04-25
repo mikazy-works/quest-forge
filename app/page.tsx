@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function HomePage() {
@@ -34,6 +35,22 @@ export default function HomePage() {
               <p className="subtle">
                 光属性 / SSR / 前衛と知略を両立する、華やかなフィニッシャー。
               </p>
+            </div>
+            <div className="hero-art-card">
+              <Image
+                src="/images/rpg-class-portraits.png"
+                alt="架空RPG職業診断の職業ビジュアル一覧"
+                width={1536}
+                height={1024}
+                priority
+                className="hero-art-image"
+              />
+              <div className="hero-art-overlay">
+                <span className="chip">Class Artwork</span>
+                <p>
+                  騎士、魔導士、神官、召喚士などの雰囲気を、ゲーム風アートとして表示。
+                </p>
+              </div>
             </div>
             <div className="preview-grid" id="features">
               <div className="preview-card">
