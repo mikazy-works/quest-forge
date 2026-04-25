@@ -1,3 +1,4 @@
+import { ShareActions } from "@/components/share-actions";
 import type { DiagnosisRecord } from "@/lib/types";
 
 type ResultCardProps = {
@@ -5,9 +6,10 @@ type ResultCardProps = {
 };
 
 export function ResultCard({ result }: ResultCardProps) {
-  const shareUrl =
-    result.share_url ??
-    `${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/results/${result.id}`.replace(/\/+$/, "");
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/+$/, "");
+  const sharePath = result.share_url ?? `/results/${result.id}`;
+  const shareUrl = siteUrl ? `${siteUrl}${sharePath}` : sharePath;
+  const crestLabel = `${result.element}属性 / ${result.rarity}`;
 
   return (
     <article className="result-card">
@@ -24,6 +26,30 @@ export function ResultCard({ result }: ResultCardProps) {
           <span className="meta-pill">レア度: {result.rarity}</span>
           <span className="meta-pill">共有ID: {result.id.slice(0, 8)}</span>
         </div>
+      </div>
+
+      <div className="result-hero-grid">
+        <section className="portrait-panel">
+          <div className={`portrait-orb element-${result.element}`}>
+            <div className="portrait-ring" />
+            <div className="portrait-core">
+              <span className="portrait-job">{result.job_name.slice(0, 4)}</span>
+              <span className="portrait-meta">{crestLabel}</span>
+            </div>
+          </div>
+          <p className="subtle portrait-copy">
+            診断結果をもとに生成された冒険者エンブレム。職業の雰囲気をゲーム風カードとして表現しています。
+          </p>
+        </section>
+
+        <section className="panel">
+          <h3>共有 URL</h3>
+          <p className="share-url">{shareUrl}</p>
+          <ShareActions shareUrl={shareUrl} title={`${result.name}の診断結果`} />
+          <p className="subtle">
+            この URL をそのまま共有すると、同じ結果カードを開けます。
+          </p>
+        </section>
       </div>
 
       <div className="stats-grid">
@@ -60,8 +86,10 @@ export function ResultCard({ result }: ResultCardProps) {
           <p>{result.name}</p>
         </section>
         <section className="panel">
-          <h4>共有 URL</h4>
-          <p className="subtle">{shareUrl}</p>
+          <h4>属性と希少度</h4>
+          <p>
+            {result.element}属性 / {result.rarity}
+          </p>
         </section>
         <section className="panel">
           <h4>保存日時</h4>
