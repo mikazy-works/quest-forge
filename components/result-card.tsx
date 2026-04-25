@@ -1,3 +1,4 @@
+import { JobPortrait } from "@/components/job-portrait";
 import { ShareActions } from "@/components/share-actions";
 import type { DiagnosisRecord } from "@/lib/types";
 
@@ -9,8 +10,6 @@ export function ResultCard({ result }: ResultCardProps) {
   const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/+$/, "");
   const sharePath = result.share_url ?? `/results/${result.id}`;
   const shareUrl = siteUrl ? `${siteUrl}${sharePath}` : sharePath;
-  const crestLabel = `${result.element}属性 / ${result.rarity}`;
-
   return (
     <article className="result-card">
       <div className="result-header">
@@ -30,15 +29,11 @@ export function ResultCard({ result }: ResultCardProps) {
 
       <div className="result-hero-grid">
         <section className="portrait-panel">
-          <div className={`portrait-orb element-${result.element}`}>
-            <div className="portrait-ring" />
-            <div className="portrait-core">
-              <span className="portrait-job">{result.job_name.slice(0, 4)}</span>
-              <span className="portrait-meta">{crestLabel}</span>
-            </div>
+          <div className="portrait-orb">
+            <JobPortrait jobName={result.job_name} element={result.element} />
           </div>
           <p className="subtle portrait-copy">
-            診断結果をもとに生成された冒険者エンブレム。職業の雰囲気をゲーム風カードとして表現しています。
+            属性と職業タイプに応じて自動生成される、ゲーム風の職業ビジュアルです。
           </p>
         </section>
 
