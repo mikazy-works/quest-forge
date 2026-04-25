@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ResultCard } from "@/components/result-card";
 import { getDiagnosisResultById } from "@/lib/data";
+import { isValidResultId } from "@/lib/security";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +14,11 @@ type ResultPageProps = {
 
 export default async function ResultPage({ params }: ResultPageProps) {
   const { id } = await params;
+
+  if (!isValidResultId(id)) {
+    notFound();
+  }
+
   const result = await getDiagnosisResultById(id);
 
   if (!result) {

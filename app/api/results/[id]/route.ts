@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getDiagnosisResultById } from "@/lib/data";
+import { isValidResultId } from "@/lib/security";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +12,11 @@ type RouteProps = {
 
 export async function GET(_request: Request, { params }: RouteProps) {
   const { id } = await params;
+
+  if (!isValidResultId(id)) {
+    return NextResponse.json({ error: "結果IDの形式が不正です。" }, { status: 400 });
+  }
+
   const result = await getDiagnosisResultById(id);
 
   if (!result) {

@@ -7,9 +7,24 @@ type ResultCardProps = {
 };
 
 export function ResultCard({ result }: ResultCardProps) {
-  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/+$/, "");
+  const rawSiteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "").trim();
+  const siteUrl = rawSiteUrl
+    ? /^https?:\/\//i.test(rawSiteUrl)
+      ? rawSiteUrl.replace(/\/+$/, "")
+      : `https://${rawSiteUrl.replace(/\/+$/, "")}`
+    : "";
   const sharePath = result.share_url ?? `/results/${result.id}`;
   const shareUrl = siteUrl ? `${siteUrl}${sharePath}` : sharePath;
+  const formattedCreatedAt = new Intl.DateTimeFormat("ja-JP", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  }).format(new Date(result.created_at));
+
   return (
     <article className="result-card">
       <div className="result-header">
@@ -33,7 +48,7 @@ export function ResultCard({ result }: ResultCardProps) {
             <JobPortrait jobName={result.job_name} element={result.element} />
           </div>
           <p className="subtle portrait-copy">
-            属性と職業タイプに応じて自動生成される、ゲーム風の職業ビジュアルです。
+            属性と職業タイプに応じて自動で選ばれる、ゲーム風の職業アートです。
           </p>
         </section>
 
@@ -88,7 +103,7 @@ export function ResultCard({ result }: ResultCardProps) {
         </section>
         <section className="panel">
           <h4>保存日時</h4>
-          <p>{new Date(result.created_at).toLocaleString("ja-JP")}</p>
+          <p>{formattedCreatedAt} JST</p>
         </section>
       </div>
 
