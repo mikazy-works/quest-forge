@@ -35,3 +35,28 @@ npm run dev
 2. Vercel で import
 3. 上記 3 つの環境変数を設定
 4. Deploy
+
+## 診断結果の保存でエラーが出るとき
+
+`Missing required Supabase environment variables` が出る場合は、Supabase の接続情報が未設定です。
+
+### ローカル開発
+
+1. `.env.example` をコピーして `.env.local` を作成
+2. 次の値を入力
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
+
+3. Supabase の SQL Editor で `supabase/schema.sql` を実行
+4. 開発サーバーを再起動
+
+### Vercel 本番
+
+1. `Project Settings > Environment Variables` を開く
+2. 上と同じ 4 つの環境変数を登録
+3. 再デプロイする
