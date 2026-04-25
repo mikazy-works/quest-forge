@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { diagnoseAdventureProfile } from "@/lib/diagnosis-engine";
 import { createDiagnosisResult } from "@/lib/data";
+import { checkDiagnosisRateLimit } from "@/lib/rate-limit";
 import { isAllowedOrigin, sanitizeName, validateAnswers } from "@/lib/security";
 
 export const dynamic = "force-dynamic";
@@ -9,6 +10,20 @@ export async function POST(request: Request) {
   try {
     if (!isAllowedOrigin(request)) {
       return NextResponse.json({ error: "許可されていないリクエストです。" }, { status: 403 });
+    }
+
+    const rateLimit = checkDiagnosisRateLimit(request);
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: "短時間の送信回数が多すぎます。少し待ってから再度お試しください。" },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(Math.ceil((rateLimit.retryAfterMs ?? 0) / 1000))
+          }
+        }
+      );
     }
 
     const body = await request.json();
