@@ -67,6 +67,7 @@ export function ResultCard({ result }: ResultCardProps) {
           <ShareActions shareUrl={shareUrl} title={`${result.name}の診断結果`} />
           <p className="subtle">
             この URL をそのまま共有すると、同じ結果カードを開けます。
+            結果は保存から30日で自動削除されます。
           </p>
         </section>
       </div>
