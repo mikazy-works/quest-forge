@@ -7,6 +7,7 @@ type ResultCardProps = {
 };
 
 export function ResultCard({ result }: ResultCardProps) {
+  const isUr = result.rarity === "UR";
   const rawSiteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "").trim();
   const siteUrl = rawSiteUrl
     ? /^https?:\/\//i.test(rawSiteUrl)
@@ -26,10 +27,14 @@ export function ResultCard({ result }: ResultCardProps) {
   }).format(new Date(result.created_at));
 
   return (
-    <article className="result-card">
+    <article className={`result-card${isUr ? " result-card--ur" : ""}`}>
       <div className="result-header">
         <div>
-          <span className="eyebrow">Adventurer Result</span>
+          {isUr ? (
+            <span className="ur-badge">★ UR HIDDEN JOB ★</span>
+          ) : (
+            <span className="eyebrow">Adventurer Result</span>
+          )}
           <h1 className="result-title">{result.job_name}</h1>
           <p className="lead">
             {result.name} の冒険者適性は <strong>{result.job_name}</strong>。戦場での振る舞いと価値観から導かれた職業です。
@@ -37,7 +42,9 @@ export function ResultCard({ result }: ResultCardProps) {
         </div>
         <div className="result-meta">
           <span className="meta-pill">属性: {result.element}</span>
-          <span className="meta-pill">レア度: {result.rarity}</span>
+          <span className={`meta-pill${isUr ? " meta-pill--ur" : ""}`}>
+            レア度: {result.rarity}
+          </span>
           <span className="meta-pill">魂: {result.mbti_type}</span>
           <span className="meta-pill">共有ID: {result.id.slice(0, 8)}</span>
         </div>

@@ -10,6 +10,51 @@ type PortraitSpec = {
   palette: Palette;
   title: string;
   imagePath: string;
+  hidden: boolean;
+};
+
+type HiddenPortrait = {
+  imagePath: string;
+  palette: Palette;
+};
+
+const HIDDEN_JOB_PORTRAITS: Record<string, HiddenPortrait> = {
+  魔王の後継者: {
+    imagePath: "/images/classes/summoner-dark.png",
+    palette: {
+      primary: "#b66bff",
+      secondary: "#ff5f8f",
+      glow: "rgba(182, 107, 255, 0.55)",
+      line: "#f2dcff"
+    }
+  },
+  世界一運のいい村人: {
+    imagePath: "/images/classes/rogue-wind.png",
+    palette: {
+      primary: "#ffd166",
+      secondary: "#fff3b0",
+      glow: "rgba(255, 209, 102, 0.55)",
+      line: "#fff7dd"
+    }
+  },
+  奇跡の大聖者: {
+    imagePath: "/images/classes/priest-water.png",
+    palette: {
+      primary: "#fff0b3",
+      secondary: "#9fe8ff",
+      glow: "rgba(255, 240, 179, 0.55)",
+      line: "#fffbe8"
+    }
+  },
+  無銘の勇者: {
+    imagePath: "/images/classes/knight-fire.png",
+    palette: {
+      primary: "#eef7ff",
+      secondary: "#ffd166",
+      glow: "rgba(238, 247, 255, 0.5)",
+      line: "#ffffff"
+    }
+  }
 };
 
 const ELEMENT_PALETTES: Record<string, Palette> = {
@@ -102,12 +147,25 @@ function getImagePath(archetype: PortraitSpec["archetype"], element: string) {
 }
 
 export function getPortraitSpec(jobName: string, element: string): PortraitSpec {
+  const hiddenPortrait = HIDDEN_JOB_PORTRAITS[jobName];
+
+  if (hiddenPortrait) {
+    return {
+      archetype: inferArchetype(jobName),
+      palette: hiddenPortrait.palette,
+      title: `${element}属性の${jobName}`,
+      imagePath: hiddenPortrait.imagePath,
+      hidden: true
+    };
+  }
+
   const archetype = inferArchetype(jobName);
 
   return {
     archetype,
     palette: ELEMENT_PALETTES[element] ?? ELEMENT_PALETTES["光"],
     title: `${element}属性の${jobName}`,
-    imagePath: getImagePath(archetype, element)
+    imagePath: getImagePath(archetype, element),
+    hidden: false
   };
 }
