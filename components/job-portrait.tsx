@@ -7,11 +7,11 @@ type JobPortraitProps = {
 };
 
 export function JobPortrait({ jobName, element }: JobPortraitProps) {
-  const { palette, title, imagePath } = getPortraitSpec(jobName, element);
+  const { palette, title, imagePath, hidden } = getPortraitSpec(jobName, element);
 
   return (
     <div
-      className="job-portrait-frame"
+      className={`job-portrait-frame${hidden ? " job-portrait-frame--ur" : ""}`}
       style={{
         background: `radial-gradient(circle at 50% 35%, ${palette.glow}, rgba(8, 16, 31, 0) 58%)`
       }}

@@ -7,6 +7,10 @@ type ResultCardProps = {
 };
 
 export function ResultCard({ result }: ResultCardProps) {
+  const isUr = result.rarity === "UR";
+  const isSsr = result.rarity === "SSR";
+  const cardModifier = isUr ? " result-card--ur" : isSsr ? " result-card--ssr" : "";
+  const pillModifier = isUr ? " meta-pill--ur" : isSsr ? " meta-pill--ssr" : "";
   const rawSiteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "").trim();
   const siteUrl = rawSiteUrl
     ? /^https?:\/\//i.test(rawSiteUrl)
@@ -26,10 +30,14 @@ export function ResultCard({ result }: ResultCardProps) {
   }).format(new Date(result.created_at));
 
   return (
-    <article className="result-card">
+    <article className={`result-card${cardModifier}`}>
       <div className="result-header">
         <div>
-          <span className="eyebrow">Adventurer Result</span>
+          {isUr ? (
+            <span className="ur-badge">★ UR HIDDEN JOB ★</span>
+          ) : (
+            <span className="eyebrow">Adventurer Result</span>
+          )}
           <h1 className="result-title">{result.job_name}</h1>
           <p className="lead">
             {result.name} の冒険者適性は <strong>{result.job_name}</strong>。戦場での振る舞いと価値観から導かれた職業です。
@@ -37,7 +45,8 @@ export function ResultCard({ result }: ResultCardProps) {
         </div>
         <div className="result-meta">
           <span className="meta-pill">属性: {result.element}</span>
-          <span className="meta-pill">レア度: {result.rarity}</span>
+          <span className={`meta-pill${pillModifier}`}>レア度: {result.rarity}</span>
+          <span className="meta-pill">魂: {result.mbti_type}</span>
           <span className="meta-pill">共有ID: {result.id.slice(0, 8)}</span>
         </div>
       </div>
@@ -87,6 +96,47 @@ export function ResultCard({ result }: ResultCardProps) {
           <p>{result.adventure_style}</p>
           <h4>仲間との相性</h4>
           <p>{result.party_synergy}</p>
+        </section>
+      </div>
+
+      <div className="stats-grid">
+        <section className="panel">
+          <h3>魂のタイプ</h3>
+          <p>
+            <span className="chip">{result.mbti_type}</span>{" "}
+            <strong>{result.mbti_title}</strong>
+          </p>
+          <p className="subtle">{result.mbti_description}</p>
+        </section>
+
+        <section className="panel">
+          <h3>最高の相棒</h3>
+          <p>
+            <span className="chip">{result.partner_mbti_type}</span>{" "}
+            <strong>{result.partner_npc_name}</strong>
+          </p>
+          <p className="subtle">
+            魂のタイプは「{result.partner_mbti_title}」。{result.partner_comment}
+          </p>
+        </section>
+      </div>
+
+      <div className="stats-grid">
+        <section className="panel">
+          <h3>宿敵</h3>
+          <p>
+            <strong>{result.rival_job_name}</strong>（{result.rival_element}属性）
+          </p>
+          <p className="subtle">
+            魂のタイプは {result.rival_mbti_type}「{result.rival_mbti_title}」。
+            あなたと正反対の魂を持つ、いつか越えるべき好敵手。
+          </p>
+        </section>
+
+        <section className="panel">
+          <h3>弱点と呪い</h3>
+          <p>{result.weakness}</p>
+          <p className="subtle">{result.curse}</p>
         </section>
       </div>
 

@@ -8,7 +8,7 @@ export default function DiagnosisPage() {
           <span className="eyebrow">Adventure Setup</span>
           <h1 className="section-title">冒険者適性を診断しよう</h1>
           <p className="lead">
-            名前を入力して、6つの質問に答えるだけ。回答の傾向から、あなたの架空RPG職業をロジックベースで生成します。
+            名前を入力して、10の質問に答えるだけ。回答の傾向から、あなたの架空RPG職業と MBTI 風の「魂のタイプ」、宿敵、弱点までロジックベースで生成します。
           </p>
           <DiagnosisWizard />
         </div>
