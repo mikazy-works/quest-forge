@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ResultCard } from "@/components/result-card";
+import { RevealGate } from "@/components/reveal-gate";
 import { getDiagnosisResultById } from "@/lib/data";
 import { isValidResultId } from "@/lib/security";
 
@@ -28,7 +29,9 @@ export default async function ResultPage({ params }: ResultPageProps) {
   return (
     <main className="page-shell app-section">
       <div className="container result-layout">
-        <ResultCard result={result} />
+        <RevealGate rarity={result.rarity}>
+          <ResultCard result={result} />
+        </RevealGate>
         <div className="button-row">
           <Link className="cta" href="/diagnosis">
             もう一度診断する

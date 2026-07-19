@@ -8,6 +8,9 @@ type ResultCardProps = {
 
 export function ResultCard({ result }: ResultCardProps) {
   const isUr = result.rarity === "UR";
+  const isSsr = result.rarity === "SSR";
+  const cardModifier = isUr ? " result-card--ur" : isSsr ? " result-card--ssr" : "";
+  const pillModifier = isUr ? " meta-pill--ur" : isSsr ? " meta-pill--ssr" : "";
   const rawSiteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "").trim();
   const siteUrl = rawSiteUrl
     ? /^https?:\/\//i.test(rawSiteUrl)
@@ -27,7 +30,7 @@ export function ResultCard({ result }: ResultCardProps) {
   }).format(new Date(result.created_at));
 
   return (
-    <article className={`result-card${isUr ? " result-card--ur" : ""}`}>
+    <article className={`result-card${cardModifier}`}>
       <div className="result-header">
         <div>
           {isUr ? (
@@ -42,9 +45,7 @@ export function ResultCard({ result }: ResultCardProps) {
         </div>
         <div className="result-meta">
           <span className="meta-pill">属性: {result.element}</span>
-          <span className={`meta-pill${isUr ? " meta-pill--ur" : ""}`}>
-            レア度: {result.rarity}
-          </span>
+          <span className={`meta-pill${pillModifier}`}>レア度: {result.rarity}</span>
           <span className="meta-pill">魂: {result.mbti_type}</span>
           <span className="meta-pill">共有ID: {result.id.slice(0, 8)}</span>
         </div>

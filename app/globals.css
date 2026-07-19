@@ -664,6 +664,133 @@ select {
   }
 }
 
+/* SSR 専用演出(URより控えめな金) */
+.result-card--ssr {
+  border-color: rgba(255, 220, 122, 0.5);
+  box-shadow:
+    0 0 42px rgba(255, 220, 122, 0.16),
+    var(--shadow);
+}
+
+.result-card--ssr .result-title {
+  color: var(--gold);
+  text-shadow: 0 0 24px rgba(255, 220, 122, 0.35);
+}
+
+.meta-pill--ssr {
+  border-color: rgba(255, 220, 122, 0.55);
+  color: var(--gold);
+  background: rgba(255, 220, 122, 0.1);
+  box-shadow: 0 0 14px rgba(255, 220, 122, 0.25);
+}
+
+/* 開封(ガチャ)演出 */
+.reveal-gate {
+  display: grid;
+  place-items: center;
+  padding: 3rem 1rem 2rem;
+}
+
+.reveal-card {
+  appearance: none;
+  cursor: pointer;
+  width: min(340px, 100%);
+  aspect-ratio: 3 / 4;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 1rem;
+  border-radius: 26px;
+  color: var(--text);
+  border: 1px solid rgba(121, 255, 231, 0.3);
+  background:
+    radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.1), transparent 45%),
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.03) 0 14px,
+      rgba(255, 255, 255, 0) 14px 28px
+    ),
+    linear-gradient(180deg, rgba(16, 28, 55, 0.98), rgba(7, 12, 26, 0.98));
+  transition: transform 180ms ease, box-shadow 180ms ease;
+  animation: reveal-float 3s ease-in-out infinite;
+}
+
+.reveal-card:hover {
+  transform: translateY(-6px) scale(1.02);
+}
+
+.reveal-card--r {
+  box-shadow: 0 0 34px rgba(121, 255, 231, 0.22);
+}
+
+.reveal-card--sr {
+  border-color: rgba(154, 124, 255, 0.5);
+  box-shadow: 0 0 44px rgba(154, 124, 255, 0.35);
+}
+
+.reveal-card--ssr {
+  border-color: rgba(255, 220, 122, 0.6);
+  box-shadow: 0 0 54px rgba(255, 220, 122, 0.45);
+}
+
+.reveal-card--ur {
+  border-color: transparent;
+  box-shadow:
+    0 0 64px rgba(255, 220, 122, 0.4),
+    0 0 96px rgba(255, 118, 200, 0.3);
+  animation: reveal-float 3s ease-in-out infinite, ur-pulse 2.6s ease-in-out infinite;
+}
+
+.reveal-mark {
+  font-size: 4.4rem;
+  font-weight: 800;
+  opacity: 0.85;
+}
+
+.reveal-hint {
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+
+.reveal-cta {
+  padding: 0.7rem 1.2rem;
+  border-radius: 999px;
+  font-weight: 700;
+  color: #04111e;
+  background: linear-gradient(90deg, var(--cyan), #b6fff3);
+  box-shadow: 0 10px 26px rgba(121, 255, 231, 0.3);
+}
+
+.reveal-entrance {
+  animation: reveal-open 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes reveal-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -8px;
+  }
+}
+
+@keyframes reveal-open {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+    filter: brightness(2.4);
+  }
+  55% {
+    opacity: 1;
+    filter: brightness(1.4);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
 @media (max-width: 920px) {
   .hero-card,
   .result-hero-grid,
