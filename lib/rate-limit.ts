@@ -34,10 +34,26 @@ function getClientKey(request: Request) {
   return "unknown";
 }
 
+const PRUNE_THRESHOLD = 1000;
+
+function pruneExpiredEntries(store: Map<string, Entry>, now: number) {
+  if (store.size < PRUNE_THRESHOLD) {
+    return;
+  }
+
+  for (const [key, entry] of store) {
+    if (entry.resetAt <= now) {
+      store.delete(key);
+    }
+  }
+}
+
 export function checkDiagnosisRateLimit(request: Request) {
   const store = getStore();
   const key = getClientKey(request);
   const now = Date.now();
+
+  pruneExpiredEntries(store, now);
   const existing = store.get(key);
 
   if (!existing || existing.resetAt <= now) {

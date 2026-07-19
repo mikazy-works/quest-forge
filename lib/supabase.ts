@@ -18,11 +18,16 @@ function getSetupMessage(missingEnvNames: readonly string[]) {
   ].join(" ");
 }
 
+// 環境変数未設定はデプロイ担当者向けの案内なので、例外名で区別してAPIレスポンスに表示する
+export const SETUP_ERROR_NAME = "SupabaseSetupError";
+
 export function getSupabaseAdminClient() {
   const missingEnvNames = getMissingEnvNames();
 
   if (missingEnvNames.length > 0) {
-    throw new Error(getSetupMessage(missingEnvNames));
+    const error = new Error(getSetupMessage(missingEnvNames));
+    error.name = SETUP_ERROR_NAME;
+    throw error;
   }
 
   return createClient(

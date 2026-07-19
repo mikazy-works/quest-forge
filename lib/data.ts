@@ -27,6 +27,25 @@ function toRecord(row: SupabaseRow): DiagnosisRecord {
   };
 }
 
+// インメモリのIP別レート制限はサーバーレス環境でインスタンスごとにリセットされるため、
+// DB全体への書き込み量をカウントする最終防衛ライン。集計に失敗した場合は可用性を優先して通す
+export async function countRecentDiagnosisResults(windowMs: number) {
+  const supabase = getSupabaseAdminClient();
+  const since = new Date(Date.now() - windowMs).toISOString();
+
+  const { count, error } = await supabase
+    .from(TABLE_NAME)
+    .select("id", { count: "exact", head: true })
+    .gte("created_at", since);
+
+  if (error) {
+    console.error("Supabase count error:", error);
+    return null;
+  }
+
+  return count ?? 0;
+}
+
 export async function createDiagnosisResult(input: DiagnosisRecord) {
   const supabase = getSupabaseAdminClient();
 
@@ -48,7 +67,8 @@ export async function createDiagnosisResult(input: DiagnosisRecord) {
     .single();
 
   if (error) {
-    throw new Error(`Supabase 保存エラー: ${error.message}`);
+    console.error("Supabase insert error:", error);
+    throw new Error("診断結果の保存に失敗しました。しばらくしてからもう一度お試しください。");
   }
 
   return toRecord(data as SupabaseRow);
@@ -64,7 +84,8 @@ export async function getDiagnosisResultById(id: string) {
     .maybeSingle();
 
   if (error) {
-    throw new Error(`Supabase 取得エラー: ${error.message}`);
+    console.error("Supabase select error:", error);
+    throw new Error("診断結果の取得に失敗しました。しばらくしてからもう一度お試しください。");
   }
 
   if (!data) {
