@@ -19,6 +19,10 @@ export type DiagnosisExtras = {
   rival_element: string;
   rival_mbti_type: string;
   rival_mbti_title: string;
+  partner_mbti_type: string;
+  partner_mbti_title: string;
+  partner_npc_name: string;
+  partner_comment: string;
   weakness: string;
   curse: string;
 };

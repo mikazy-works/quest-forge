@@ -109,6 +109,19 @@ export function ResultCard({ result }: ResultCardProps) {
         </section>
 
         <section className="panel">
+          <h3>最高の相棒</h3>
+          <p>
+            <span className="chip">{result.partner_mbti_type}</span>{" "}
+            <strong>{result.partner_npc_name}</strong>
+          </p>
+          <p className="subtle">
+            魂のタイプは「{result.partner_mbti_title}」。{result.partner_comment}
+          </p>
+        </section>
+      </div>
+
+      <div className="stats-grid">
+        <section className="panel">
           <h3>宿敵</h3>
           <p>
             <strong>{result.rival_job_name}</strong>（{result.rival_element}属性）
@@ -118,17 +131,11 @@ export function ResultCard({ result }: ResultCardProps) {
             あなたと正反対の魂を持つ、いつか越えるべき好敵手。
           </p>
         </section>
-      </div>
 
-      <div className="stats-grid">
         <section className="panel">
-          <h3>弱点</h3>
+          <h3>弱点と呪い</h3>
           <p>{result.weakness}</p>
-        </section>
-
-        <section className="panel">
-          <h3>呪い</h3>
-          <p>{result.curse}</p>
+          <p className="subtle">{result.curse}</p>
         </section>
       </div>
 

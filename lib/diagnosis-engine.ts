@@ -1,5 +1,11 @@
 import { QUESTIONS } from "@/lib/questions";
-import { computeMbtiType, flipMbtiType, getMbtiProfile } from "@/lib/mbti";
+import {
+  computeMbtiType,
+  derivePartnerType,
+  flipMbtiType,
+  getMbtiProfile,
+  getPartnerNpc
+} from "@/lib/mbti";
 import type { DiagnosisExtras, DiagnosisRecord, StatBlock } from "@/lib/types";
 
 type ScoreMap = Record<string, number>;
@@ -277,6 +283,9 @@ export function deriveExtras(answers: number[]): DiagnosisExtras {
   const rivalMbtiType = flipMbtiType(mbtiType);
   const rivalMbtiProfile = getMbtiProfile(rivalMbtiType);
   const rivalScores = deriveRivalScores(scores);
+  const partnerMbtiType = derivePartnerType(mbtiType);
+  const partnerMbtiProfile = getMbtiProfile(partnerMbtiType);
+  const partnerNpc = getPartnerNpc(partnerMbtiType);
 
   return {
     mbti_type: mbtiType,
@@ -286,6 +295,10 @@ export function deriveExtras(answers: number[]): DiagnosisExtras {
     rival_element: deriveElement(rivalScores),
     rival_mbti_type: rivalMbtiType,
     rival_mbti_title: rivalMbtiProfile.title,
+    partner_mbti_type: partnerMbtiType,
+    partner_mbti_title: partnerMbtiProfile.title,
+    partner_npc_name: partnerNpc.npcName,
+    partner_comment: partnerNpc.comment,
     weakness: deriveWeakness(scores),
     curse: deriveCurse(scores)
   };

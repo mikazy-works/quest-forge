@@ -59,7 +59,7 @@ export default function HomePage() {
               </div>
               <div className="preview-card">
                 <h3>Soul Type</h3>
-                <p className="subtle">16タイプの「魂」と宿敵、弱点、呪いまで判明。</p>
+                <p className="subtle">16タイプの「魂」と最高の相棒、宿敵、弱点まで判明。</p>
               </div>
               <div className="preview-card">
                 <h3>Hidden Jobs</h3>

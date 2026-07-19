@@ -85,6 +85,100 @@ const FALLBACK_PROFILE: MbtiProfile = {
   description: "既存の16分類に収まらない、規格外の魂。"
 };
 
+type PartnerNpc = {
+  npcName: string;
+  comment: string;
+};
+
+// キーは相棒NPC自身のタイプ。NPCは黄金ペアの相手(E/IとJ/Pを反転したタイプ)にだけ表示される
+const PARTNER_NPCS: Record<string, PartnerNpc> = {
+  INTJ: {
+    npcName: "沈黙の軍師ヴェイル",
+    comment:
+      "あなたの暴走気味の発明を、最短の勝ち筋に組み込んでくれる。口数は少ないが、あなたの奇策をいちばん面白がっている。"
+  },
+  INTP: {
+    npcName: "禁書庫の魔導学者ノーチェ",
+    comment:
+      "あなたが号令をかける前に、必要な術式を調べ終えている。進軍の裏付けは、全部この相棒の書庫にある。"
+  },
+  ENTJ: {
+    npcName: "竜騎士団長ガルド",
+    comment:
+      "あなたの仮説を「面白い、やってみろ」と即断で実戦投入してくれる。考える人と決める人、最強の分業。"
+  },
+  ENTP: {
+    npcName: "爆炎の発明家ピロ",
+    comment:
+      "あなたの緻密な計画に、誰も予想しない飛び道具を足してくれる。計画の3割は爆発するが、残り7割は伝説になる。"
+  },
+  INFJ: {
+    npcName: "月詠の預言者ルナ",
+    comment:
+      "あなたが直感で飛び込んだ先の危険を、静かな予知で先回りして払ってくれる。騒いだ夜の帰り道、隣で小さく笑っている。"
+  },
+  INFP: {
+    npcName: "星歌いの吟遊詩人リラ",
+    comment:
+      "あなたが導いた仲間たちの物語を、歌にして残してくれる。あなたの理想を、いちばん深く分かっている。"
+  },
+  ENFJ: {
+    npcName: "暁の大聖導師セラフ",
+    comment:
+      "あなたの胸の中の理想を言葉にして、みんなに届けてくれる。あなたの夢は、この相棒の声で世界に広がる。"
+  },
+  ENFP: {
+    npcName: "旅する太陽児ソル",
+    comment:
+      "あなたの静かな予感を「じゃあ行こう！」と冒険に変えてくれる。あなたが見た未来を、いちばん楽しそうに走ってくれる相棒。"
+  },
+  ISTJ: {
+    npcName: "白銀の門番グラム",
+    comment:
+      "あなたの無茶な賭けの後ろで、退路と補給を完璧に守っている。「また勝ったのか」とため息をつきつつ、実は毎回楽しみにしている。"
+  },
+  ISFJ: {
+    npcName: "癒し手の白盾ミア",
+    comment:
+      "舞台で輝くあなたの、衣装のほつれも疲れも見逃さない。あなたが最高の笑顔でいられるのは、この相棒の支度のおかげ。"
+  },
+  ESTJ: {
+    npcName: "遠征団長バルト",
+    comment:
+      "あなたが黙って直した装備の価値を、正しく評価して報酬に反映してくれる。職人と親方、言葉少なでも通じ合う。"
+  },
+  ESFJ: {
+    npcName: "宿場の名料理人ポム",
+    comment:
+      "あなたが描いた絵をいちばんいい席に飾って、みんなに自慢してくれる。あなたの感性の、最初のファン。"
+  },
+  ISTP: {
+    npcName: "無口な鍛冶師ロッド",
+    comment:
+      "あなたの遠征計画に必要な装備を、頼む前に打ち上げている。納期は完璧、文句は一切なし、酒には付き合う。"
+  },
+  ISFP: {
+    npcName: "森の風景画家スイ",
+    comment:
+      "あなたの宿場の温かさを、絵に残して旅人に伝えてくれる。あなたの何気ない日常が、この相棒には宝物に見えている。"
+  },
+  ESTP: {
+    npcName: "賭場の風雲児ジェット",
+    comment:
+      "あなたが守り抜いた日常に、ちょうどいい刺激を運んでくる。規律と無謀、なぜか組むと勝率が上がる。"
+  },
+  ESFP: {
+    npcName: "旅一座の看板姫ティア",
+    comment:
+      "あなたの献身を舞台の上から「うちの誇り！」と叫んでくれる。あなたの陰の働きを、いちばん光の当たる場所で讃える相棒。"
+  }
+};
+
+const FALLBACK_PARTNER: PartnerNpc = {
+  npcName: "名もなき旅人",
+  comment: "あなたの旅路のどこかで、必ず出会うことになる相棒。"
+};
+
 export function computeMbtiType(answers: number[]): string {
   const tally: Record<MbtiLetter, number> = {
     E: 0,
@@ -134,4 +228,19 @@ export function flipMbtiType(type: string): string {
 
 export function getMbtiProfile(type: string): MbtiProfile {
   return MBTI_PROFILES[type] ?? FALLBACK_PROFILE;
+}
+
+// 黄金ペア方式: E/IとJ/Pを反転し、S/NとT/Fは共有する(ENFP↔INFJなど)。
+// 対称なので、相棒タイプの人から見てもこちらが相棒になる
+export function derivePartnerType(type: string): string {
+  const flip: Record<string, string> = { E: "I", I: "E", J: "P", P: "J" };
+
+  return type
+    .split("")
+    .map((letter, index) => (index === 0 || index === 3 ? flip[letter] ?? letter : letter))
+    .join("");
+}
+
+export function getPartnerNpc(partnerType: string): PartnerNpc {
+  return PARTNER_NPCS[partnerType] ?? FALLBACK_PARTNER;
 }
