@@ -12,8 +12,8 @@ export default function HomePage() {
               架空<span className="gradient-text">RPG職業診断</span>
             </h1>
             <p className="lead">
-              名前と選択肢をもとに、あなたの戦闘スタイル、属性、レア度、必殺技まで一気に診断。
-              シェアできる冒険者カードを生成する、ゲーム風 MVP です。
+              名前と選択肢をもとに、あなたの戦闘スタイル、属性、レア度、必殺技、そして MBTI 風の「魂のタイプ」まで一気に診断。
+              宿敵や弱点、隠しジョブも飛び出す、シェアできる冒険者カードを生成するゲーム風 MVP です。
             </p>
             <div className="button-row">
               <Link className="cta" href="/diagnosis">
@@ -54,8 +54,16 @@ export default function HomePage() {
             </div>
             <div className="preview-grid" id="features">
               <div className="preview-card">
-                <h3>6 Questions</h3>
-                <p className="subtle">5問以上の選択式で性格と戦術を判定。</p>
+                <h3>10 Questions</h3>
+                <p className="subtle">MBTI 風の4軸を含む10問で性格と戦術を判定。</p>
+              </div>
+              <div className="preview-card">
+                <h3>Soul Type</h3>
+                <p className="subtle">16タイプの「魂」と宿敵、弱点、呪いまで判明。</p>
+              </div>
+              <div className="preview-card">
+                <h3>Hidden Jobs</h3>
+                <p className="subtle">特定の組み合わせでのみ現れる UR 隠しジョブ。</p>
               </div>
               <div className="preview-card">
                 <h3>Share URL</h3>

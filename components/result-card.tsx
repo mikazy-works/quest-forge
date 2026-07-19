@@ -38,6 +38,7 @@ export function ResultCard({ result }: ResultCardProps) {
         <div className="result-meta">
           <span className="meta-pill">属性: {result.element}</span>
           <span className="meta-pill">レア度: {result.rarity}</span>
+          <span className="meta-pill">魂: {result.mbti_type}</span>
           <span className="meta-pill">共有ID: {result.id.slice(0, 8)}</span>
         </div>
       </div>
@@ -87,6 +88,40 @@ export function ResultCard({ result }: ResultCardProps) {
           <p>{result.adventure_style}</p>
           <h4>仲間との相性</h4>
           <p>{result.party_synergy}</p>
+        </section>
+      </div>
+
+      <div className="stats-grid">
+        <section className="panel">
+          <h3>魂のタイプ</h3>
+          <p>
+            <span className="chip">{result.mbti_type}</span>{" "}
+            <strong>{result.mbti_title}</strong>
+          </p>
+          <p className="subtle">{result.mbti_description}</p>
+        </section>
+
+        <section className="panel">
+          <h3>宿敵</h3>
+          <p>
+            <strong>{result.rival_job_name}</strong>（{result.rival_element}属性）
+          </p>
+          <p className="subtle">
+            魂のタイプは {result.rival_mbti_type}「{result.rival_mbti_title}」。
+            あなたと正反対の魂を持つ、いつか越えるべき好敵手。
+          </p>
+        </section>
+      </div>
+
+      <div className="stats-grid">
+        <section className="panel">
+          <h3>弱点</h3>
+          <p>{result.weakness}</p>
+        </section>
+
+        <section className="panel">
+          <h3>呪い</h3>
+          <p>{result.curse}</p>
         </section>
       </div>
 

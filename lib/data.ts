@@ -1,3 +1,4 @@
+import { deriveExtras } from "@/lib/diagnosis-engine";
 import { getSupabaseAdminClient } from "@/lib/supabase";
 import type { DiagnosisRecord } from "@/lib/types";
 
@@ -21,6 +22,7 @@ type SupabaseRow = {
 function toRecord(row: SupabaseRow): DiagnosisRecord {
   return {
     ...row,
+    ...deriveExtras(row.answers ?? []),
     share_url: `/results/${row.id}`
   };
 }
